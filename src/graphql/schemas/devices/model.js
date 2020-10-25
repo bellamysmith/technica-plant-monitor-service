@@ -3,15 +3,15 @@ class StatusReports {
     this.dynamoConnector = dynamoConnector;
   }
 
-  async createStatusReport(input) {
+  async createDevice(input) {
     const { id } = input;
     const transformedInput = {
       ...input,
       createTime: Date.now().toString(),
       id: id,
       pk: id,
-      sk: 'REPORT',
-      dataType: 'REPORT',
+      sk: 'DEVICE',
+      dataType: 'DEVICE',
     };
     await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
     return {
@@ -20,12 +20,12 @@ class StatusReports {
     };
   }
 
-  async getCurrentStatus(id) {
+  async getDeviceInfo(id) {
     const response = await this.dynamoConnector.getByPartitionAndSortConditionOnIndex(
       'pk',
       id,
       'sk',
-      ['REPORT'],
+      ['DEVICE'],
       `EQ`,
       null,
       null,
@@ -34,10 +34,10 @@ class StatusReports {
     return response;
   }
 
-  async getAllStatusReports() {
+  async getAllDevices() {
     const response = await this.dynamoConnector.getByPartition(
       'sk',
-      'REPORT'
+      'DEVICE'
     );
     return response;
   }

@@ -4,6 +4,16 @@ provider:
   name: aws
   runtime: nodejs12.x
   profile: ${self:custom.accounts.${opt:acct}.profile}
+  apiKeys:
+    - technicaPlantMonitor
+  usagePlan:
+    quota:
+      limit: 5000
+      offset: 2
+      period: MONTH
+    throttle:
+      burstLimit: 200
+      rateLimit: 100
   environment:
     ACCOUNT_NAME: ${opt:acct}
     DEBUG: ${self:custom.accounts.${opt:acct}.debug}
@@ -11,7 +21,6 @@ provider:
     SERVERLESS_STAGE: ${opt:stage}
     SERVERLESS_REGION: ${opt:region}
     SINGLE_TABLE_NAME: ${self:service}-${opt:stage}-table
-    SINGLE_TABLE_SK_DATA_INDEX: SkDataIndex
 
   iamRoleStatements:
     - Effect: Allow
@@ -23,11 +32,6 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - Fn::GetAtt: EntitiesTable.Arn
-        - Fn::Join:
-            - '/'
-            - - Fn::GetAtt: EntitiesTable.Arn
-              - index
-              - ${self:provider.environment.SINGLE_TABLE_SK_DATA_INDEX}
 package:
   individually: true
 custom:
@@ -36,7 +40,7 @@ custom:
   accounts:
     dev:
       debug: '*'
-      profile: bellamy-sandbox
+      profile: bellamy-personal
 plugins:
   - serverless-webpack
   - serverless-offline
@@ -49,7 +53,7 @@ functions:
           path: graphql
           method: post
           cors: true
-      # TODO: Add API Key
+          private: true
 
 resources:
   Resources:
@@ -70,15 +74,6 @@ resources:
           - AttributeName: sk
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        GlobalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.SINGLE_TABLE_SK_DATA_INDEX}
-            KeySchema:
-              - AttributeName: sk
-                KeyType: HASH
-              - AttributeName: data
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
         TimeToLiveSpecification:
           AttributeName: ttl
           Enabled: true

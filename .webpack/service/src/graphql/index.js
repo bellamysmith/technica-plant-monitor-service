@@ -110,6 +110,54 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./src/graphql/schemas/devices/index.js":
+/*!**********************************************!*\
+  !*** ./src/graphql/schemas/devices/index.js ***!
+  \**********************************************/
+/*! exports provided: typedef, resolvers, Devices */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _typedef__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typedef */ \"./src/graphql/schemas/devices/typedef.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"typedef\", function() { return _typedef__WEBPACK_IMPORTED_MODULE_0__[\"default\"]; });\n\n/* harmony import */ var _resolvers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resolvers */ \"./src/graphql/schemas/devices/resolvers.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"resolvers\", function() { return _resolvers__WEBPACK_IMPORTED_MODULE_1__[\"default\"]; });\n\n/* harmony import */ var _model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./model */ \"./src/graphql/schemas/devices/model.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Devices\", function() { return _model__WEBPACK_IMPORTED_MODULE_2__[\"default\"]; });\n\n\n\n\n\n//# sourceURL=webpack:///./src/graphql/schemas/devices/index.js?");
+
+/***/ }),
+
+/***/ "./src/graphql/schemas/devices/model.js":
+/*!**********************************************!*\
+  !*** ./src/graphql/schemas/devices/model.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\nclass StatusReports {\n  constructor(dynamoConnector) {\n    this.dynamoConnector = dynamoConnector;\n  }\n\n  async createDevice(input) {\n    const {\n      id\n    } = input;\n    const transformedInput = { ...input,\n      createTime: Date.now().toString(),\n      id: id,\n      pk: id,\n      sk: 'DEVICE',\n      dataType: 'DEVICE'\n    };\n    await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);\n    return { ...transformedInput,\n      latestIncrement: null\n    };\n  }\n\n  async getDeviceInfo(id) {\n    const response = await this.dynamoConnector.getByPartitionAndSortConditionOnIndex('pk', id, 'sk', ['DEVICE'], `EQ`, null, null, null);\n    return response;\n  }\n\n  async getAllDevices() {\n    const response = await this.dynamoConnector.getByPartition('sk', 'DEVICE');\n    return response;\n  }\n\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (StatusReports);\n\n//# sourceURL=webpack:///./src/graphql/schemas/devices/model.js?");
+
+/***/ }),
+
+/***/ "./src/graphql/schemas/devices/resolvers.js":
+/*!**************************************************!*\
+  !*** ./src/graphql/schemas/devices/resolvers.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\nconst resolvers = {\n  Query: {\n    getAllStatusReports(_, args, ctx) {\n      return ctx.models.StatusReports.getAllStatusReports();\n    },\n\n    getCurrentStatus(_, {\n      id\n    }, ctx) {\n      return ctx.models.StatusReports.getCurrentStatus(id);\n    }\n\n  },\n  Mutation: {\n    createStatusReport(_, {\n      input\n    }, ctx) {\n      return ctx.models.StatusReports.createStatusReport(input);\n    }\n\n  }\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (resolvers);\n\n//# sourceURL=webpack:///./src/graphql/schemas/devices/resolvers.js?");
+
+/***/ }),
+
+/***/ "./src/graphql/schemas/devices/typedef.js":
+/*!************************************************!*\
+  !*** ./src/graphql/schemas/devices/typedef.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\nconst typedef = `\n  type StatusReport {\n    id: String\n    createTime: String\n    reportTime: String\n    temp: String\n    tempStatus: String\n    cap: String\n    capStatus: String\n  }\n\n\n  input CreateStatusReportInput {\n    id: String\n    reportTime: String\n    temp: String\n    tempStatus: String\n    cap: String\n    capStatus: String\n  }\n\n\n\n  extend type Query {\n    getAllStatusReports(nextToken: String): [StatusReport]\n    getCurrentStatus(id: String!): [StatusReport]\n  }\n\n  extend type Mutation {\n    createStatusReport(input: CreateStatusReportInput!): StatusReport\n  }\n`;\n/* harmony default export */ __webpack_exports__[\"default\"] = (typedef);\n\n//# sourceURL=webpack:///./src/graphql/schemas/devices/typedef.js?");
+
+/***/ }),
+
 /***/ "./src/graphql/schemas/index.js":
 /*!**************************************!*\
   !*** ./src/graphql/schemas/index.js ***!
@@ -118,7 +166,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/merge */ \"lodash/merge\");\n/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_merge__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _statusReports__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./statusReports */ \"./src/graphql/schemas/statusReports/index.js\");\n\n\nconst query = `\n  type Query {\n    _empty: String\n  }\n`;\nconst mutation = `\n  type Mutation {\n    _empty: String\n  }\n`;\nconst schemaDefinition = `\n  schema {\n    query: Query\n    mutation: Mutation\n  }\n`;\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  typeDefs: [schemaDefinition, query, mutation, _statusReports__WEBPACK_IMPORTED_MODULE_1__[\"typedef\"]],\n  resolvers: lodash_merge__WEBPACK_IMPORTED_MODULE_0___default()({}, _statusReports__WEBPACK_IMPORTED_MODULE_1__[\"resolvers\"])\n});\n\n//# sourceURL=webpack:///./src/graphql/schemas/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/merge */ \"lodash/merge\");\n/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_merge__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _statusReports__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./statusReports */ \"./src/graphql/schemas/statusReports/index.js\");\n/* harmony import */ var _devices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./devices */ \"./src/graphql/schemas/devices/index.js\");\n\n\n\nconst query = `\n  type Query {\n    _empty: String\n  }\n`;\nconst mutation = `\n  type Mutation {\n    _empty: String\n  }\n`;\nconst schemaDefinition = `\n  schema {\n    query: Query\n    mutation: Mutation\n  }\n`;\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  typeDefs: [schemaDefinition, query, mutation, _statusReports__WEBPACK_IMPORTED_MODULE_1__[\"typedef\"], _devices__WEBPACK_IMPORTED_MODULE_2__[\"typedef\"]],\n  resolvers: lodash_merge__WEBPACK_IMPORTED_MODULE_0___default()({}, _statusReports__WEBPACK_IMPORTED_MODULE_1__[\"resolvers\"], _devices__WEBPACK_IMPORTED_MODULE_2__[\"resolvers\"])\n});\n\n//# sourceURL=webpack:///./src/graphql/schemas/index.js?");
 
 /***/ }),
 
@@ -142,7 +190,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _typ
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nclass StatusReports {\n  constructor(dynamoConnector) {\n    this.dynamoConnector = dynamoConnector;\n  }\n\n  async createStatusReport(input) {\n    const {\n      id\n    } = input;\n    const transformedInput = { ...input,\n      createTime: Date.now().toString(),\n      id: id,\n      pk: id,\n      sk: 'REPORT',\n      dataType: 'REPORT'\n    };\n    await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);\n    return { ...transformedInput,\n      latestIncrement: null\n    };\n  }\n\n  async getCurrentStatus(id) {\n    const response = await this.dynamoConnector.getByPartitionAndSortConditionOnIndex('pk', id, 'sk', ['REPORT'], `EQ`, null, null, null);\n    return response;\n  }\n\n  async getAllStatusReports() {\n    const response = await this.dynamoConnector.getByPartitionOnIndex('sk', 'REPORT', process.env.SINGLE_TABLE_SK_DATA_INDEX, {\n      ScanIndexForward: false\n    });\n    return response;\n  }\n\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (StatusReports);\n\n//# sourceURL=webpack:///./src/graphql/schemas/statusReports/model.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nclass StatusReports {\n  constructor(dynamoConnector) {\n    this.dynamoConnector = dynamoConnector;\n  }\n\n  async createStatusReport(input) {\n    const {\n      id\n    } = input;\n    const transformedInput = { ...input,\n      createTime: Date.now().toString(),\n      id: id,\n      pk: id,\n      sk: 'REPORT',\n      dataType: 'REPORT'\n    };\n    await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);\n    return { ...transformedInput,\n      latestIncrement: null\n    };\n  }\n\n  async getCurrentStatus(id) {\n    const response = await this.dynamoConnector.getByPartitionAndSortConditionOnIndex('pk', id, 'sk', ['REPORT'], `EQ`, null, null, null);\n    return response;\n  }\n\n  async getAllStatusReports() {\n    const response = await this.dynamoConnector.getByPartition('sk', 'REPORT');\n    return response;\n  }\n\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (StatusReports);\n\n//# sourceURL=webpack:///./src/graphql/schemas/statusReports/model.js?");
 
 /***/ }),
 

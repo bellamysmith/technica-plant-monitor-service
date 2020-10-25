@@ -7,7 +7,7 @@
     "clean": "rm -rf .nyc_output/ .webpack/ .serverless/ coverage/",
     "pretest": "npm run clean",
     "test": "better-npm-run test",
-    "start": "sls offline -H --port 3001 -r us-east-1 -s dev --acct dev",
+    "start": "sls offline --apiKey 1234-test -H --port 3001 -r us-east-1 -s dev --acct dev",
     "lint": "eslint ./",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --write \"{,!(node_modules)/**/}*.js\"",
@@ -46,5 +46,13 @@
     "sinon-chai": "^3.5.0",
     "webpack": "^4.42.1",
     "webpack-node-externals": "^1.7.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bellamysmith/technica-plant-monitor-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bellamysmith/technica-plant-monitor-service/issues"
+  },
+  "homepage": "https://github.com/bellamysmith/technica-plant-monitor-service#readme"
 }
