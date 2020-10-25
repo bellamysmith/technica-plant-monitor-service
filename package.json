@@ -1,0 +1,50 @@
+{
+  "name": "technica-plant-monitor-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf .nyc_output/ .webpack/ .serverless/ coverage/",
+    "pretest": "npm run clean",
+    "test": "better-npm-run test",
+    "start": "sls offline -H --port 3001 -r us-east-1 -s dev --acct dev",
+    "lint": "eslint ./",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write \"{,!(node_modules)/**/}*.js\"",
+    "deploy": "sls deploy -v -r us-east-1 -s dev --acct dev"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-lambda": "^2.14.2",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0",
+    "aws-sdk": "^2.656.0",
+    "aws-sdk-mock": "^5.1.0",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-istanbul": "^6.0.0",
+    "better-npm-run": "^0.1.1",
+    "chai": "^4.2.0",
+    "dirty-chai": "^2.0.1",
+    "eslint": "^7.3.1",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.1",
+    "prettier": "^2.0.5",
+    "serverless": "^1.67.3",
+    "serverless-offline": "^6.1.4",
+    "serverless-webpack": "^5.3.1",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0",
+    "webpack": "^4.42.1",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
