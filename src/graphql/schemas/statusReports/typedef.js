@@ -9,7 +9,6 @@ const typedef = `
     capStatus: String
   }
 
-
   input CreateStatusReportInput {
     id: String
     reportTime: String
@@ -18,8 +17,6 @@ const typedef = `
     cap: String
     capStatus: String
   }
-
-
 
   extend type Query {
     getAllStatusReports(nextToken: String): [StatusReport]

@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from 'apollo-server-lambda';
 import DynamoConnector from '../connectors/dynamo-connector';
 import { StatusReports } from './schemas/statusReports';
+import { Devices } from "./schemas/devices";
 
 import schema from './schemas';
 
@@ -13,6 +14,9 @@ const contextFn = async ({ event, context }) => {
     context,
     models: {
       StatusReports: new StatusReports(
+        dynamoConnector
+      ),
+      Devices: new Devices(
         dynamoConnector
       )
     }

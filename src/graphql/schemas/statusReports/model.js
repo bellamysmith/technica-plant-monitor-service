@@ -35,9 +35,12 @@ class StatusReports {
   }
 
   async getAllStatusReports() {
-    const response = await this.dynamoConnector.getByPartition(
+
+    // TODO add the sk index
+    const response = await this.dynamoConnector.getByPartitionOnIndex(
       'sk',
-      'REPORT'
+      'REPORT',
+
     );
     return response;
   }

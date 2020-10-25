@@ -1,4 +1,4 @@
-class StatusReports {
+class Devices {
   constructor(dynamoConnector) {
     this.dynamoConnector = dynamoConnector;
   }
@@ -43,4 +43,4 @@ class StatusReports {
   }
 }
 
-export default StatusReports;
+export default Devices;
